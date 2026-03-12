@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Biblioteca</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+<h1>📚 Sistema de Biblioteca</h1>
+</header>
+
+<main class="container">
+
+<section class="pesquisa">
+<h2>Pesquisar Livro</h2>
+
+<input 
+type="text" 
+placeholder="Digite o título do livro..."
+class="input-pesquisa"
+>
+
+<button class="btn">Pesquisar</button>
+
+</section>
+
+
+<section class="cadastro">
+
+<h2>Cadastrar / Editar Livro</h2>
+
+<form class="form-livro">
+
+<div class="campo">
+<label>Título</label>
+<input type="text" placeholder="Digite o título">
+</div>
+
+<div class="campo">
+<label>Autor</label>
+<input type="text" placeholder="Digite o autor">
+</div>
+
+<div class="campo">
+<label>Ano</label>
+<input type="number" placeholder="Digite o ano">
+</div>
+
+<div class="campo">
+<label>ISBN</label>
+<input type="text" placeholder="Digite o ISBN">
+</div>
+
+<div class="botoes-form">
+
+<button type="submit" class="btn salvar">
+Salvar
+</button>
+
+<button type="reset" class="btn cancelar">
+Cancelar
+</button>
+
+</div>
+
+</form>
+
+</section>
+
+
+<section class="lista">
+
+<h2>Lista de Livros</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Título</th>
+<th>Autor</th>
+<th>Ano</th>
+<th>ISBN</th>
+<th>Ações</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>Exemplo de Livro</td>
+<td>Autor Exemplo</td>
+<td>2024</td>
+<td>123456789</td>
+
+<td class="acoes">
+
+<button class="btn editar">
+Editar
+</button>
+
+<button class="btn excluir">
+Excluir
+</button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</section>
+
+</main>
+
+</body>
+</html>
