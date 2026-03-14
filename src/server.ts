@@ -6,7 +6,7 @@ app.use(express.json());
 
 // 1. Diga ao Express onde estão seus arquivos (HTML, CSS, JS do front)
 // Se o index.html estiver numa pasta chamada 'public':
-app.use(express.static(path.join(import.meta.dirname, '../src')));
+app.use(express.static(path.join(import.meta.dirname, '..')));
 
 interface RequestBody {
   name: string;
@@ -15,7 +15,7 @@ interface RequestBody {
 // 2. Rota GET para servir o HTML quando você acessar no navegador
 app.get('/', (_, res) => {
   // Ajuste o caminho abaixo para onde seu arquivo index.html realmente está
-  res.sendFile(path.join(import.meta.dirname, '../src/index.html')); 
+  res.sendFile(path.join(import.meta.dirname, '../index.html')); 
 });
 
 // Sua rota POST atual (continua funcionando para formulários/insomnia)
