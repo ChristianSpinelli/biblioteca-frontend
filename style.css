@@ -35,13 +35,6 @@ section{
     box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
 
-.input-search{
-    padding:10px;
-    width:70%;
-    border:1px solid #ccc;
-    border-radius:4px;
-}
-
 .form-book{
     display:grid;
     grid-template-columns:1fr 1fr;
