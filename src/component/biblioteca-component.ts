@@ -17,6 +17,8 @@ export class BibliotecaComponent{
     public fillBooksOnTable(books:Array<Book>){
         const table: HTMLTableElement = document.getElementById("book-table") as HTMLTableElement;
         const tbody = table.getElementsByTagName("tbody").item(0) as HTMLTableSectionElement;
+        tbody.innerHTML = "";
+        
         for(const book of books){
             const row: HTMLTableRowElement = document.createElement("tr");
             
@@ -55,4 +57,26 @@ export class BibliotecaComponent{
         }
     }
 
+    public async onClickSaveBook(): Promise<void>{
+        const inputTitle = document.getElementById("input-title") as HTMLInputElement;
+        const inputAuthor = document.getElementById("input-author") as HTMLInputElement;
+        const inputYear = document.getElementById("input-year") as HTMLInputElement;
+        const inputIsbn = document.getElementById("input-isbn") as HTMLInputElement;
+
+        if(!inputTitle.value || !inputAuthor.value || !inputYear.value || !inputIsbn.value){
+            alert("Preencha todos os campos para cadastrar.");
+            throw new Error("Campos obrigatórios não preenchidos");
+        }
+
+        const book:Book = {
+            author:inputAuthor.value,
+            title:inputTitle.value,
+            year:Number(inputYear.value),
+            isbn:inputIsbn.value 
+        }
+
+        await this.bookService.createBook(book);
+    }
+
+    
 }
