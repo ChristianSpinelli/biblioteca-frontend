@@ -1,4 +1,5 @@
 import type { Book } from "../model/book.js";
+import type { Response } from "../model/response.js";
 import { BASE_URL } from "../utils/environment.js";
 
 export class BookService {
@@ -29,7 +30,7 @@ export class BookService {
         return await response.json();
    }
 
-   public async deleteBook(bookId:number):Promise<string>{
+   public async deleteBook(bookId:number):Promise<Response>{
         const response = await fetch(`${BASE_URL}/biblioteca/books/book/${bookId}`,{
             method:"DELETE"
         });

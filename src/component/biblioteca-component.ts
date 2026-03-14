@@ -1,6 +1,6 @@
 import type { Book } from "../model/book.js";
+import type { Response } from "../model/response.js";
 import type { BookService } from "../services/book-service.js";
-
 
 export class BibliotecaComponent{
 
@@ -44,11 +44,13 @@ export class BibliotecaComponent{
             const buttonEdit: HTMLButtonElement = document.createElement("button")
             buttonEdit.className = "btn edit";
             buttonEdit.textContent = "Editar";
+            buttonEdit.dataset['bookId'] = book!.id?.toString();
             cellButtons.appendChild(buttonEdit);
 
             const buttonDelete: HTMLButtonElement = document.createElement("button")
             buttonDelete.className = "btn delete";
             buttonDelete.textContent = "Excluir";
+            buttonDelete.dataset['bookId'] = book!.id?.toString();
             cellButtons.appendChild(buttonDelete);
 
             row.appendChild(cellButtons);
@@ -57,7 +59,7 @@ export class BibliotecaComponent{
         }
     }
 
-    public async onClickSaveBook(): Promise<void>{
+    public async saveBook(): Promise<void>{
         const inputTitle = document.getElementById("input-title") as HTMLInputElement;
         const inputAuthor = document.getElementById("input-author") as HTMLInputElement;
         const inputYear = document.getElementById("input-year") as HTMLInputElement;
@@ -78,5 +80,8 @@ export class BibliotecaComponent{
         await this.bookService.createBook(book);
     }
 
+    public async deleteBook(bookId:number): Promise<Response>{
+        return await this.bookService.deleteBook(bookId);
+    }
     
 }
