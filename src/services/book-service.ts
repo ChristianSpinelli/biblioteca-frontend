@@ -1,9 +1,10 @@
 import type { Book } from "../model/book.js";
+import type { Response } from "../model/response.js";
 import { BASE_URL } from "../utils/environment.js";
 
 export class BookService {
 
-    public async listBooks(lastBookId:number, pageLength: number): Promise<Array<Book>>{
+    public async listBooks(lastBookId:number, pageLength:number):Promise<Book[]>{
         const response = await fetch(`${BASE_URL}/biblioteca/books/${lastBookId}/${pageLength}`);
 
         if(!response.ok){
@@ -13,12 +14,10 @@ export class BookService {
         return await response.json();
     }
 
-   public async createBook(book:Book): Promise<Book>{
-        const response = await fetch(`${BASE_URL}/biblioteca/books/book`, {
+    public async createBook(book:Book):Promise<Book>{
+        const response = await fetch(`${BASE_URL}/biblioteca/books/book`,{
             method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
+            headers:{ "Content-Type":"application/json" },
             body:JSON.stringify(book)
         });
 
@@ -27,9 +26,9 @@ export class BookService {
         }
 
         return await response.json();
-   }
+    }
 
-   public async deleteBook(bookId:number):Promise<string>{
+    public async deleteBook(bookId:number):Promise<Response>{
         const response = await fetch(`${BASE_URL}/biblioteca/books/book/${bookId}`,{
             method:"DELETE"
         });
@@ -39,14 +38,12 @@ export class BookService {
         }
 
         return await response.json();
-   }
+    }
 
-   public async updateBook(book:Book){
+    public async updateBook(book:Book){
         const response = await fetch(`${BASE_URL}/biblioteca/books/book/${book.id}`,{
             method:"PUT",
-            headers:{
-                "Content-Type":"application/json"
-            },
+            headers:{ "Content-Type":"application/json" },
             body:JSON.stringify(book)
         });
 
@@ -55,6 +52,6 @@ export class BookService {
         }
 
         return await response.json();
-   }
+    }
 
 }
