@@ -1,85 +1,118 @@
 import type { Book } from "../model/book.js";
-import type { Response } from "../model/response.js";
-import type { BookService } from "../services/book-service.js";
 
-export class BibliotecaComponent{
+export class BibliotecaComponent {
 
-    private bookService:BookService;
+    private saveHandler?: (book:Book)=>void;
+    private editHandler?: (bookId:number)=>void;
+    private deleteHandler?: (bookId:number)=>void;
+    private cancelHandler?: ()=>void;
 
-    constructor(bookService:BookService){
-        this.bookService = bookService;
+    constructor(){
+        this.initForm();
+        this.initTableEvents();
+        this.initCancel();
     }
 
-    public async loadBooks(lastBookId:number, pageLength:number): Promise<Array<Book>>{
-        return await this.bookService.listBooks(lastBookId, pageLength);
+    private initForm(){
+        const form = document.querySelector(".form-book") as HTMLFormElement;
+        form.addEventListener("submit",(event)=>{
+            event.preventDefault();
+
+            const { title, author, year, isbn } = form.elements as any;
+
+            const book:Book = {
+                title:title.value,
+                author:author.value,
+                year:Number(year.value),
+                isbn:isbn.value
+            };
+
+            this.saveHandler?.(book);
+        });
     }
 
-    public fillBooksOnTable(books:Array<Book>){
-        const table: HTMLTableElement = document.getElementById("book-table") as HTMLTableElement;
-        const tbody = table.getElementsByTagName("tbody").item(0) as HTMLTableSectionElement;
+    private initCancel(){
+        const btnCancel = document.getElementById("btn-cancel");
+
+        btnCancel?.addEventListener("click",()=>{
+            this.cancelHandler?.();
+        });
+    }
+
+    private initTableEvents(){
+        const table = document.getElementById("book-table") as HTMLTableElement;
+        table.addEventListener("click",(event)=>{
+            const target = event.target as HTMLElement;
+
+            if(target.classList.contains("edit")){
+                const id = Number(target.dataset['bookId']);
+                this.editHandler?.(id);
+            }
+
+            if(target.classList.contains("delete")){
+                const id = Number(target.dataset['bookId']);
+                this.deleteHandler?.(id);
+            }
+
+        });
+
+    }
+
+    public bindSave(handler:(book:Book)=>void){
+        this.saveHandler = handler;
+    }
+
+    public bindEdit(handler:(bookId:number)=>void){
+        this.editHandler = handler;
+    }
+
+    public bindDelete(handler:(bookId:number)=>void){
+        this.deleteHandler = handler;
+    }
+
+    public bindCancel(handler:()=>void){
+        this.cancelHandler = handler;
+    }
+
+    public renderBooks(books:Book[]){
+        const table = document.getElementById("book-table") as HTMLTableElement;
+        const tbody = table.querySelector("tbody") as HTMLTableSectionElement;
+
         tbody.innerHTML = "";
-        
+
         for(const book of books){
-            const row: HTMLTableRowElement = document.createElement("tr");
-            
-            const cellTitle: HTMLTableCellElement = document.createElement("td");
-            cellTitle.textContent = book.title;
-            row.appendChild(cellTitle);
+            const row = document.createElement("tr");
 
-            const cellAuthor: HTMLTableCellElement = document.createElement("td");
-            cellAuthor.textContent = book.author;
-            row.appendChild(cellAuthor);
-            
-            const cellYear: HTMLTableCellElement = document.createElement("td");
-            cellYear.textContent = book.year.toString();
-            row.appendChild(cellYear);
+            row.innerHTML = `
+                <td>${book.title}</td>
+                <td>${book.author}</td>
+                <td>${book.year}</td>
+                <td>${book.isbn}</td>
+                <td class="buttons">
+                    <button class="btn edit" data-book-id="${book.id}">Editar</button>
+                    <button class="btn delete" data-book-id="${book.id}">Excluir</button>
+                </td>
+            `;
 
-            const cellIsbn: HTMLTableCellElement = document.createElement("td");
-            cellIsbn.textContent = book.isbn.toString();
-            row.appendChild(cellIsbn);
-
-            const cellButtons: HTMLTableCellElement = document.createElement("td");
-            cellButtons.className = "buttons";
-            
-            const buttonEdit: HTMLButtonElement = document.createElement("button")
-            buttonEdit.className = "btn edit";
-            buttonEdit.textContent = "Editar";
-            buttonEdit.dataset['bookId'] = book!.id?.toString();
-            cellButtons.appendChild(buttonEdit);
-
-            const buttonDelete: HTMLButtonElement = document.createElement("button")
-            buttonDelete.className = "btn delete";
-            buttonDelete.textContent = "Excluir";
-            buttonDelete.dataset['bookId'] = book!.id?.toString();
-            cellButtons.appendChild(buttonDelete);
-
-            row.appendChild(cellButtons);
-            
             tbody.appendChild(row);
         }
+
     }
 
-    public async saveBook(book:Book): Promise<void>{
-        
-        if(!book.author || !book.title || !book.year || !book.isbn){
-            alert("Preencha todos os campos para cadastrar.");
-            throw new Error("Campos obrigatórios não preenchidos");
-        }
+    public fillForm(book:Book){
+        const form = document.querySelector(".form-book") as HTMLFormElement;
 
-        await this.bookService.createBook(book);
+        const { title, author, year, isbn } = form.elements as any;
+
+        title.value = book.title;
+        author.value = book.author;
+        year.value = book.year;
+        isbn.value = book.isbn;
     }
 
-    public async deleteBook(bookId:number): Promise<Response>{
-        return await this.bookService.deleteBook(bookId);
+    public resetForm(){
+        const form = document.querySelector(".form-book") as HTMLFormElement;
+        form.reset();
     }
 
-    public async editBook(book:Book){
-         if(!book.title || !book.author || !book.year || !book.isbn){
-            alert("Preencha todos os campos para cadastrar.");
-            throw new Error("Campos obrigatórios não preenchidos");
-        }
-
-        return await this.bookService.updateBook(book);
-    }
-    
 }
