@@ -59,22 +59,11 @@ export class BibliotecaComponent{
         }
     }
 
-    public async saveBook(): Promise<void>{
-        const inputTitle = document.getElementById("input-title") as HTMLInputElement;
-        const inputAuthor = document.getElementById("input-author") as HTMLInputElement;
-        const inputYear = document.getElementById("input-year") as HTMLInputElement;
-        const inputIsbn = document.getElementById("input-isbn") as HTMLInputElement;
-
-        if(!inputTitle.value || !inputAuthor.value || !inputYear.value || !inputIsbn.value){
+    public async saveBook(book:Book): Promise<void>{
+        
+        if(!book.author || !book.title || !book.year || !book.isbn){
             alert("Preencha todos os campos para cadastrar.");
             throw new Error("Campos obrigatórios não preenchidos");
-        }
-
-        const book:Book = {
-            author:inputAuthor.value,
-            title:inputTitle.value,
-            year:Number(inputYear.value),
-            isbn:inputIsbn.value 
         }
 
         await this.bookService.createBook(book);
@@ -82,6 +71,15 @@ export class BibliotecaComponent{
 
     public async deleteBook(bookId:number): Promise<Response>{
         return await this.bookService.deleteBook(bookId);
+    }
+
+    public async editBook(book:Book){
+         if(!book.title || !book.author || !book.year || !book.isbn){
+            alert("Preencha todos os campos para cadastrar.");
+            throw new Error("Campos obrigatórios não preenchidos");
+        }
+
+        return await this.bookService.updateBook(book);
     }
     
 }
