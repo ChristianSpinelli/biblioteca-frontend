@@ -19,7 +19,7 @@ PostgreSQL Database
 🧩 Tecnologias Utilizadas
 Backend
 
-Java 17
+Java 25
 
 Spring Boot
 
